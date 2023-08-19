@@ -80,17 +80,19 @@ class _KakaoMapState extends State<KakaoMap> {
       params = const PlatformWebViewControllerCreationParams();
     }
 
-    final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
+    final WebViewController controller =
+        WebViewController.fromPlatformCreationParams(params);
 
-    controller
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadHtmlString(_loadMap());
+    controller.setJavaScriptMode(JavaScriptMode.unrestricted);
 
     addJavaScriptChannels(controller);
 
+    controller.loadHtmlString(_loadMap());
+
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
-      (controller.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
+      (controller.platform as AndroidWebViewController)
+          .setMediaPlaybackRequiresUserGesture(false);
     }
 
     _mapController = KakaoMapController(controller);
@@ -847,16 +849,22 @@ class _KakaoMapState extends State<KakaoMap> {
 
   void addJavaScriptChannels(WebViewController controller) {
     controller
-      ..addJavaScriptChannel('onMapCreated', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('onMapCreated',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMapCreated != null) widget.onMapCreated!(_mapController);
       })
-      ..addJavaScriptChannel('onMapTap', onMessageReceived: (JavaScriptMessage result) {
-        if (widget.onMapTap != null) widget.onMapTap!(LatLng.fromJson(jsonDecode(result.message)));
+      ..addJavaScriptChannel('onMapTap',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onMapTap != null)
+          widget.onMapTap!(LatLng.fromJson(jsonDecode(result.message)));
       })
-      ..addJavaScriptChannel('onMapDoubleTap', onMessageReceived: (JavaScriptMessage result) {
-        if (widget.onMapDoubleTap != null) widget.onMapDoubleTap!(LatLng.fromJson(jsonDecode(result.message)));
+      ..addJavaScriptChannel('onMapDoubleTap',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onMapDoubleTap != null)
+          widget.onMapDoubleTap!(LatLng.fromJson(jsonDecode(result.message)));
       })
-      ..addJavaScriptChannel('onMarkerTap', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('onMarkerTap',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMarkerTap != null) {
           widget.onMarkerTap!(
             jsonDecode(result.message)['markerId'],
@@ -865,17 +873,21 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('onMarkerDragChangeCallback', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('onMarkerDragChangeCallback',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMarkerDragChangeCallback != null) {
           widget.onMarkerDragChangeCallback!(
             jsonDecode(result.message)['markerId'],
             LatLng.fromJson(jsonDecode(result.message)),
             jsonDecode(result.message)['zoomLevel'],
-            jsonDecode(result.message)['drag'] == 'dragstart' ? MarkerDragType.start : MarkerDragType.end,
+            jsonDecode(result.message)['drag'] == 'dragstart'
+                ? MarkerDragType.start
+                : MarkerDragType.end,
           );
         }
       })
-      ..addJavaScriptChannel('zoomStart', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('zoomStart',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onZoomChangeCallback != null) {
           widget.onZoomChangeCallback!(
             jsonDecode(result.message)['zoomLevel'],
@@ -883,7 +895,8 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('zoomChanged', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('zoomChanged',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onZoomChangeCallback != null) {
           widget.onZoomChangeCallback!(
             jsonDecode(result.message)['zoomLevel'],
@@ -891,7 +904,8 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('centerChanged', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('centerChanged',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onCenterChangeCallback != null) {
           widget.onCenterChangeCallback!(
             LatLng.fromJson(jsonDecode(result.message)),
@@ -899,7 +913,8 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('boundsChanged', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('boundsChanged',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onBoundsChangeCallback != null) {
           final latLngBounds = jsonDecode(result.message);
 
@@ -912,7 +927,8 @@ class _KakaoMapState extends State<KakaoMap> {
           ));
         }
       })
-      ..addJavaScriptChannel('dragStart', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('dragStart',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onDragChangeCallback != null) {
           widget.onDragChangeCallback!(
             LatLng.fromJson(jsonDecode(result.message)),
@@ -921,7 +937,8 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('drag', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('drag',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onDragChangeCallback != null) {
           widget.onDragChangeCallback!(
             LatLng.fromJson(jsonDecode(result.message)),
@@ -930,7 +947,8 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('dragEnd', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('dragEnd',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onDragChangeCallback != null) {
           widget.onDragChangeCallback!(
             LatLng.fromJson(jsonDecode(result.message)),
@@ -939,7 +957,8 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('cameraIdle', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('cameraIdle',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onCameraIdle != null) {
           widget.onCameraIdle!(
             LatLng.fromJson(jsonDecode(result.message)),
@@ -947,7 +966,8 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       })
-      ..addJavaScriptChannel('tilesLoaded', onMessageReceived: (JavaScriptMessage result) {
+      ..addJavaScriptChannel('tilesLoaded',
+          onMessageReceived: (JavaScriptMessage result) {
         if (widget.onTilesLoadedCallback != null) {
           widget.onTilesLoadedCallback!(
             LatLng.fromJson(jsonDecode(result.message)),
