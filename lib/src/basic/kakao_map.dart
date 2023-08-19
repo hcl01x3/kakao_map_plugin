@@ -67,7 +67,7 @@ class _KakaoMapState extends State<KakaoMap> {
   late final KakaoMapController _mapController;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
 
     late final PlatformWebViewControllerCreationParams params;
@@ -83,11 +83,7 @@ class _KakaoMapState extends State<KakaoMap> {
     final WebViewController controller =
         WebViewController.fromPlatformCreationParams(params);
 
-    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-
-    await addJavaScriptChannels(controller);
-
-    await controller.loadHtmlString(_loadMap());
+    _handleJavscript(controller);
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
@@ -847,7 +843,9 @@ class _KakaoMapState extends State<KakaoMap> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<void> addJavaScriptChannels(WebViewController controller) async {
+  Future<void> _handleJavscript(WebViewController controller) async {
+    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+    await controller.loadHtmlString(_loadMap());
     await Future.wait([
       controller.addJavaScriptChannel('onMapCreated',
           onMessageReceived: (JavaScriptMessage result) {
