@@ -67,7 +67,7 @@ class _KakaoMapState extends State<KakaoMap> {
   late final KakaoMapController _mapController;
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
 
     late final PlatformWebViewControllerCreationParams params;
@@ -83,11 +83,11 @@ class _KakaoMapState extends State<KakaoMap> {
     final WebViewController controller =
         WebViewController.fromPlatformCreationParams(params);
 
-    controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
 
-    addJavaScriptChannels(controller);
+    await addJavaScriptChannels(controller);
 
-    controller.loadHtmlString(_loadMap());
+    await controller.loadHtmlString(_loadMap());
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
@@ -847,23 +847,23 @@ class _KakaoMapState extends State<KakaoMap> {
     super.didUpdateWidget(oldWidget);
   }
 
-  void addJavaScriptChannels(WebViewController controller) {
-    controller
-      ..addJavaScriptChannel('onMapCreated',
+  Future<void> addJavaScriptChannels(WebViewController controller) async {
+    await Future.wait([
+      controller.addJavaScriptChannel('onMapCreated',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMapCreated != null) widget.onMapCreated!(_mapController);
-      })
-      ..addJavaScriptChannel('onMapTap',
+      }),
+      controller.addJavaScriptChannel('onMapTap',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMapTap != null)
           widget.onMapTap!(LatLng.fromJson(jsonDecode(result.message)));
-      })
-      ..addJavaScriptChannel('onMapDoubleTap',
+      }),
+      controller.addJavaScriptChannel('onMapDoubleTap',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMapDoubleTap != null)
           widget.onMapDoubleTap!(LatLng.fromJson(jsonDecode(result.message)));
-      })
-      ..addJavaScriptChannel('onMarkerTap',
+      }),
+      controller.addJavaScriptChannel('onMarkerTap',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMarkerTap != null) {
           widget.onMarkerTap!(
@@ -872,8 +872,8 @@ class _KakaoMapState extends State<KakaoMap> {
             jsonDecode(result.message)['zoomLevel'],
           );
         }
-      })
-      ..addJavaScriptChannel('onMarkerDragChangeCallback',
+      }),
+      controller.addJavaScriptChannel('onMarkerDragChangeCallback',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onMarkerDragChangeCallback != null) {
           widget.onMarkerDragChangeCallback!(
@@ -885,8 +885,8 @@ class _KakaoMapState extends State<KakaoMap> {
                 : MarkerDragType.end,
           );
         }
-      })
-      ..addJavaScriptChannel('zoomStart',
+      }),
+      controller.addJavaScriptChannel('zoomStart',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onZoomChangeCallback != null) {
           widget.onZoomChangeCallback!(
@@ -894,8 +894,8 @@ class _KakaoMapState extends State<KakaoMap> {
             ZoomType.start,
           );
         }
-      })
-      ..addJavaScriptChannel('zoomChanged',
+      }),
+      controller.addJavaScriptChannel('zoomChanged',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onZoomChangeCallback != null) {
           widget.onZoomChangeCallback!(
@@ -903,8 +903,8 @@ class _KakaoMapState extends State<KakaoMap> {
             ZoomType.end,
           );
         }
-      })
-      ..addJavaScriptChannel('centerChanged',
+      }),
+      controller.addJavaScriptChannel('centerChanged',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onCenterChangeCallback != null) {
           widget.onCenterChangeCallback!(
@@ -912,8 +912,8 @@ class _KakaoMapState extends State<KakaoMap> {
             jsonDecode(result.message)['zoomLevel'],
           );
         }
-      })
-      ..addJavaScriptChannel('boundsChanged',
+      }),
+      controller.addJavaScriptChannel('boundsChanged',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onBoundsChangeCallback != null) {
           final latLngBounds = jsonDecode(result.message);
@@ -926,8 +926,8 @@ class _KakaoMapState extends State<KakaoMap> {
             LatLng(ne['latitude'], ne['longitude']),
           ));
         }
-      })
-      ..addJavaScriptChannel('dragStart',
+      }),
+      controller.addJavaScriptChannel('dragStart',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onDragChangeCallback != null) {
           widget.onDragChangeCallback!(
@@ -936,8 +936,8 @@ class _KakaoMapState extends State<KakaoMap> {
             DragType.start,
           );
         }
-      })
-      ..addJavaScriptChannel('drag',
+      }),
+      controller.addJavaScriptChannel('drag',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onDragChangeCallback != null) {
           widget.onDragChangeCallback!(
@@ -946,8 +946,8 @@ class _KakaoMapState extends State<KakaoMap> {
             DragType.move,
           );
         }
-      })
-      ..addJavaScriptChannel('dragEnd',
+      }),
+      controller.addJavaScriptChannel('dragEnd',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onDragChangeCallback != null) {
           widget.onDragChangeCallback!(
@@ -956,8 +956,8 @@ class _KakaoMapState extends State<KakaoMap> {
             DragType.end,
           );
         }
-      })
-      ..addJavaScriptChannel('cameraIdle',
+      }),
+      controller.addJavaScriptChannel('cameraIdle',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onCameraIdle != null) {
           widget.onCameraIdle!(
@@ -965,8 +965,8 @@ class _KakaoMapState extends State<KakaoMap> {
             jsonDecode(result.message)['zoomLevel'],
           );
         }
-      })
-      ..addJavaScriptChannel('tilesLoaded',
+      }),
+      controller.addJavaScriptChannel('tilesLoaded',
           onMessageReceived: (JavaScriptMessage result) {
         if (widget.onTilesLoadedCallback != null) {
           widget.onTilesLoadedCallback!(
@@ -974,6 +974,7 @@ class _KakaoMapState extends State<KakaoMap> {
             jsonDecode(result.message)['zoomLevel'],
           );
         }
-      });
+      }),
+    ]);
   }
 }
