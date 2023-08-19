@@ -855,7 +855,6 @@ class _KakaoMapState extends State<KakaoMap> {
 
   Future<void> _handleJavscript(WebViewController controller) async {
     await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-    await controller.loadHtmlString(_loadMap());
     await Future.wait([
       controller.addJavaScriptChannel('onMapCreated',
           onMessageReceived: (JavaScriptMessage result) {
@@ -984,5 +983,6 @@ class _KakaoMapState extends State<KakaoMap> {
       //   }
       // }),
     ]);
+    await controller.loadHtmlString(_loadMap());
   }
 }
