@@ -70,16 +70,6 @@ class _KakaoMapState extends State<KakaoMap> {
   void initState() {
     super.initState();
 
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-    print('onMarkerTap is not null: ${widget.onMarkerTap != null}');
-
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -93,13 +83,13 @@ class _KakaoMapState extends State<KakaoMap> {
     final WebViewController controller =
         WebViewController.fromPlatformCreationParams(params);
 
-    _handleJavscript(controller);
-
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
       (controller.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
     }
+
+    _handleJavscript(controller);
 
     _mapController = KakaoMapController(controller);
   }
@@ -880,108 +870,108 @@ class _KakaoMapState extends State<KakaoMap> {
           );
         }
       }),
-      // controller.addJavaScriptChannel('onMarkerDragChangeCallback',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onMarkerDragChangeCallback != null) {
-      //     widget.onMarkerDragChangeCallback!(
-      //       jsonDecode(result.message)['markerId'],
-      //       LatLng.fromJson(jsonDecode(result.message)),
-      //       jsonDecode(result.message)['zoomLevel'],
-      //       jsonDecode(result.message)['drag'] == 'dragstart'
-      //           ? MarkerDragType.start
-      //           : MarkerDragType.end,
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('zoomStart',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onZoomChangeCallback != null) {
-      //     widget.onZoomChangeCallback!(
-      //       jsonDecode(result.message)['zoomLevel'],
-      //       ZoomType.start,
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('zoomChanged',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onZoomChangeCallback != null) {
-      //     widget.onZoomChangeCallback!(
-      //       jsonDecode(result.message)['zoomLevel'],
-      //       ZoomType.end,
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('centerChanged',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onCenterChangeCallback != null) {
-      //     widget.onCenterChangeCallback!(
-      //       LatLng.fromJson(jsonDecode(result.message)),
-      //       jsonDecode(result.message)['zoomLevel'],
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('boundsChanged',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onBoundsChangeCallback != null) {
-      //     final latLngBounds = jsonDecode(result.message);
+      controller.addJavaScriptChannel('onMarkerDragChangeCallback',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onMarkerDragChangeCallback != null) {
+          widget.onMarkerDragChangeCallback!(
+            jsonDecode(result.message)['markerId'],
+            LatLng.fromJson(jsonDecode(result.message)),
+            jsonDecode(result.message)['zoomLevel'],
+            jsonDecode(result.message)['drag'] == 'dragstart'
+                ? MarkerDragType.start
+                : MarkerDragType.end,
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('zoomStart',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onZoomChangeCallback != null) {
+          widget.onZoomChangeCallback!(
+            jsonDecode(result.message)['zoomLevel'],
+            ZoomType.start,
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('zoomChanged',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onZoomChangeCallback != null) {
+          widget.onZoomChangeCallback!(
+            jsonDecode(result.message)['zoomLevel'],
+            ZoomType.end,
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('centerChanged',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onCenterChangeCallback != null) {
+          widget.onCenterChangeCallback!(
+            LatLng.fromJson(jsonDecode(result.message)),
+            jsonDecode(result.message)['zoomLevel'],
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('boundsChanged',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onBoundsChangeCallback != null) {
+          final latLngBounds = jsonDecode(result.message);
 
-      //     final sw = latLngBounds['sw'];
-      //     final ne = latLngBounds['ne'];
+          final sw = latLngBounds['sw'];
+          final ne = latLngBounds['ne'];
 
-      //     widget.onBoundsChangeCallback!(LatLngBounds(
-      //       LatLng(sw['latitude'], sw['longitude']),
-      //       LatLng(ne['latitude'], ne['longitude']),
-      //     ));
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('dragStart',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onDragChangeCallback != null) {
-      //     widget.onDragChangeCallback!(
-      //       LatLng.fromJson(jsonDecode(result.message)),
-      //       jsonDecode(result.message)['zoomLevel'],
-      //       DragType.start,
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('drag',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onDragChangeCallback != null) {
-      //     widget.onDragChangeCallback!(
-      //       LatLng.fromJson(jsonDecode(result.message)),
-      //       jsonDecode(result.message)['zoomLevel'],
-      //       DragType.move,
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('dragEnd',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onDragChangeCallback != null) {
-      //     widget.onDragChangeCallback!(
-      //       LatLng.fromJson(jsonDecode(result.message)),
-      //       jsonDecode(result.message)['zoomLevel'],
-      //       DragType.end,
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('cameraIdle',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onCameraIdle != null) {
-      //     widget.onCameraIdle!(
-      //       LatLng.fromJson(jsonDecode(result.message)),
-      //       jsonDecode(result.message)['zoomLevel'],
-      //     );
-      //   }
-      // }),
-      // controller.addJavaScriptChannel('tilesLoaded',
-      //     onMessageReceived: (JavaScriptMessage result) {
-      //   if (widget.onTilesLoadedCallback != null) {
-      //     widget.onTilesLoadedCallback!(
-      //       LatLng.fromJson(jsonDecode(result.message)),
-      //       jsonDecode(result.message)['zoomLevel'],
-      //     );
-      //   }
-      // }),
+          widget.onBoundsChangeCallback!(LatLngBounds(
+            LatLng(sw['latitude'], sw['longitude']),
+            LatLng(ne['latitude'], ne['longitude']),
+          ));
+        }
+      }),
+      controller.addJavaScriptChannel('dragStart',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onDragChangeCallback != null) {
+          widget.onDragChangeCallback!(
+            LatLng.fromJson(jsonDecode(result.message)),
+            jsonDecode(result.message)['zoomLevel'],
+            DragType.start,
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('drag',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onDragChangeCallback != null) {
+          widget.onDragChangeCallback!(
+            LatLng.fromJson(jsonDecode(result.message)),
+            jsonDecode(result.message)['zoomLevel'],
+            DragType.move,
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('dragEnd',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onDragChangeCallback != null) {
+          widget.onDragChangeCallback!(
+            LatLng.fromJson(jsonDecode(result.message)),
+            jsonDecode(result.message)['zoomLevel'],
+            DragType.end,
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('cameraIdle',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onCameraIdle != null) {
+          widget.onCameraIdle!(
+            LatLng.fromJson(jsonDecode(result.message)),
+            jsonDecode(result.message)['zoomLevel'],
+          );
+        }
+      }),
+      controller.addJavaScriptChannel('tilesLoaded',
+          onMessageReceived: (JavaScriptMessage result) {
+        if (widget.onTilesLoadedCallback != null) {
+          widget.onTilesLoadedCallback!(
+            LatLng.fromJson(jsonDecode(result.message)),
+            jsonDecode(result.message)['zoomLevel'],
+          );
+        }
+      }),
     ]);
     await controller.loadHtmlString(_loadMap());
   }
